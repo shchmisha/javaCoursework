@@ -17,6 +17,7 @@ public class Stage {
     private static int number=100;
     private int raceId;
     private static int numberOfStages;
+    private StageType stageType;
     private HashMap<Integer, Segment> segmentsMap = new HashMap<Integer, Segment>();
     private ArrayList<Rider> riders =new ArrayList<>();
     StageState stageState;
@@ -29,6 +30,11 @@ public class Stage {
         this.id= number++;
         this.stageState= StageState.Preparing;
         this.startTime = startTime;
+        this.stageType = type;
+    }
+
+    public ArrayList<Rider> getStageRiders() {
+        return this.riders;
     }
 
     public double getLength() {
@@ -92,8 +98,8 @@ public class Stage {
 
     public ArrayList<Rider> getStageRidersRanking() {
         for (int i=0; i<riders.size()-1; i++ ) {
-            for (int j=0; j<riders.size()-i-1;i++) {
-                if (riders.get(j).getElapsedTime(this.id).compareTo(riders.get(j+1).getElapsedTime(this.id)) > 0 ) {
+            for (int j=0; j<riders.size()-i-1;j++) {
+                if (riders.get(j).getElapsedTime(this).compareTo(riders.get(j+1).getElapsedTime(this)) > 0 ) {
                     Collections.swap(riders, j, j+1);
                 }
             }
@@ -109,6 +115,35 @@ public class Stage {
         }
 
         return arr;
+    }
+
+    public int getRiderRanking(int riderId) {
+        ArrayList<Rider> rankings = this.getStageRidersRanking();
+        int index = 0;
+        for (int i=0; i<rankings.size();i++) {
+            if (rankings.get(i).getId() == riderId) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    public StageType getType() {
+        return this.stageType;
+    }
+
+    public int[] getRiderPoints() {
+        int[] points = new int[riders.size()];
+        for (int i=0; i<riders.size(); i++) {
+            this.getStageRidersRanking().get(i).setSprintPoints(this);
+            points[i] = this.getStageRidersRanking().get(i).getRiderPointsForStage(this);
+        }
+        return points;
+    }
+
+    public void setRidersSprintPoints() {
+//        iterate through riders
+//        set each rider's points for the stage
     }
 
 }

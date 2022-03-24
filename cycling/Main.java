@@ -7,6 +7,48 @@ import java.time.temporal.ChronoUnit;
 
 public class Main {
     public static void main(String[] args) throws InvalidNameException, IllegalNameException, IDNotRecognisedException, InvalidLengthException, InvalidStageStateException, InvalidLocationException, InvalidStageTypeException, DuplicatedResultException, InvalidCheckpointsException {
+
+
+        CyclingPortal g = new CyclingPortal();
+        System.out.println( g.createRace("penis", "hard"));
+        LocalDateTime f = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0, 0));
+        LocalTime t = LocalTime.of(10, 10, 0);
+        LocalTime newt = LocalTime.of(10, 20, 0);
+        System.out.println( g.addStageToRace(100, "idk", "good morning", 9.7, f, StageType.FLAT));
+        g.createTeam("teamname", "mashallah");
+        System.out.println( g.createRider(100, "omar", 1997));
+        System.out.println( g.createRider(100, "misha", 1998));
+        System.out.println( g.createRider(100, "omar", 1999));
+        System.out.println( g.createRider(100, "hussein", 2000));
+        g.addCategorizedClimbToStage(100, 5.1, SegmentType.C1, 22.1, 5.0);
+        g.addIntermediateSprintToStage(100, 90);
+        g.registerRiderResultsInStage(100, 100, t, newt);
+        g.registerRiderResultsInStage(100, 101, t, newt);
+        g.registerRiderResultsInStage(100, 102, t, newt);
+        g.registerRiderResultsInStage(100, 103, t, newt);
+
+
+//        for (LocalTime time : g.getRiderResultsInStage(100, 100)) {
+//            System.out.println(time);
+//        }
+//        for (LocalTime time : g.getRiderResultsInStage(100, 101)) {
+//            System.out.println(time);
+//        }
+//        for (LocalTime time : g.getRiderResultsInStage(100, 102)) {
+//            System.out.println(time);
+//        }
+//        for (LocalTime time : g.getRiderResultsInStage(100, 103)) {
+//            System.out.println(time);
+//        }
+
+        for (int i : g.getRidersPointsInStage(100)) {
+            System.out.println(i);
+        }
+
+    }
+}
+
+
 //        LocalTime first = LocalTime.of(10, 11, 10);
 //        LocalTime last = LocalTime.of(10, 20, 10);
 //
@@ -22,23 +64,3 @@ public class Main {
 //
 //
 //        System.out.println(elapsedTime);
-
-        CyclingPortal g = new CyclingPortal();
-        System.out.println( g.createRace("penis", "hard"));
-        LocalDateTime f = LocalDateTime.of(LocalDate.now(), LocalTime.of(10, 0, 0));
-        LocalTime t = LocalTime.of(10, 10, 0);
-        LocalTime newt = LocalTime.of(10, 20, 0);
-        System.out.println( g.addStageToRace(100, "idk", "good morning", 9.7, f, StageType.FLAT));
-        g.createTeam("teamname", "mashallah");
-        System.out.println( g.createRider(100, "omar", 1997));
-        g.addCategorizedClimbToStage(100, 5.1, SegmentType.C1, 22.1, 5.0);
-        g.addIntermediateSprintToStage(100, 90);
-        g.registerRiderResultsInStage(100, 100, t, newt);
-
-        for (LocalTime time : g.getRiderResultsInStage(100, 100)) {
-            System.out.println(time);
-        }
-
-
-    }
-}

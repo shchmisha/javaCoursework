@@ -213,6 +213,7 @@ public class CyclingPortal implements CyclingPortalInterface {
         rider.setStageResults(stage, checkpoints);
         stage.setRider(rider);
 
+
 //        add points to rider by the stage type and the place in the rank
     }
 
@@ -225,22 +226,6 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
-//        Stage stage = stages.get(stageId);
-//        Rider rider = riders.get(riderId);
-//        ArrayList<Rider> stageRiders = stage.getStageRidersRanking();
-//        int riderIndex = 0;
-//        for (Rider riderIn : stageRiders) {
-//            if (rider.getId() == riderIn.getId()) {
-//                riderIndex = riderIn.getId();
-//            }
-//        }
-//
-//        for (int i = riderIndex; i<stageRiders.size(); i++) {
-//            if (stageRiders.get(i+1).getElapsedTime(stageId).minus(stageRiders.get(i).getElapsedTime(stageId)) ) {
-//
-//            }
-//        }
-
         return LocalTime.now();
     }
 
@@ -269,7 +254,8 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public int[] getRidersPointsInStage(int stageId) throws IDNotRecognisedException {
-        return new int[0];
+        Stage stage = stages.get(stageId);
+        return stage.getRiderPoints();
     }
 
     @Override
