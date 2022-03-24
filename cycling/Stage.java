@@ -22,10 +22,7 @@ public class Stage {
     private ArrayList<Rider> riders =new ArrayList<>();
     StageState stageState;
 
-    private int[] HCPointsArr = new int[] {20, 15, 12, 10, 8, 6, 4, 2};
-    private int[] OneCPointsArr = new int[] {10, 8, 6, 4, 2, 1};
-    private int[] TwoCPointsArr = new int[] {5, 3, 2, 1};
-    private int[] ThreeCPointsArr = new int[] {2, 1};
+
 
 
     public Stage (String stageName, String description, double length, StageType type, LocalDateTime startTime){
@@ -148,110 +145,99 @@ public class Stage {
     }
 
     public void setResultsForSegment() {
-        for (Segment segment : segmentsMap.values()) {
-            ArrayList<Rider> riderRankings = riders;
+//        System.out.println(riders);
+//        System.out.println(segmentsMap.values());
+        int[] HCPointsArr = new int[] {20, 15, 12, 10, 8, 6, 4, 2};
 
-            for (int i = 0; i < riderRankings.size() - 1; i++) {
-                for (int j = 0; j < riderRankings.size() - i - 1; j++) {
-                    if (riderRankings.get(j).getSegmentResult(segment).compareTo(riderRankings.get(j + 1).getSegmentResult(segment)) > 0) {
-                        Collections.swap(riderRankings, j, j + 1);
+        int[] OneCPointsArr = new int[] {10, 8, 6, 4, 2, 1};
+        int[] TwoCPointsArr = new int[] {5, 3, 2, 1};
+        int[] ThreeCPointsArr = new int[] {2, 1};
+//        for (int i=0; i<HCPointsArr.length; i++) {
+//            System.out.println(HCPointsArr[i]);
+//        }
+
+
+        for (Segment segment : segmentsMap.values()) {
+//                System.out.println(riders);
+                ArrayList<Rider> segmentRiderRankings = new ArrayList<>(riders);
+
+
+                for (int i = 0; i < segmentRiderRankings.size() - 1; i++) {
+                    for (int j = 0; j < segmentRiderRankings.size() - i - 1; j++) {
+                        if (segmentRiderRankings.get(j).getSegmentResult(segment).compareTo(segmentRiderRankings.get(j + 1).getSegmentResult(segment)) > 0) {
+                            Collections.swap(segmentRiderRankings, j, j + 1);
+                        }
                     }
                 }
-            }
+                System.out.println(segmentRiderRankings);
+//                int count = 0;
+                for (Rider rider : segmentRiderRankings) {
+//                    rider.setSegmentPoints(segment, count++);
+                    int i = segmentRiderRankings.indexOf(rider);
+//                    System.out.println(i);
+//                    System.out.println(OneCPointsArr[i]);
+//                    System.out.println(TwoCPointsArr[i]);
+                    switch (segment.type) {
+                        case HC:
+                            if (i<8) {
 
-            for (int i = 0; i < riderRankings.size(); i++) {
-                switch (segment.type) {
-                    case HC:
-                        switch (i) {
-                            case 0:
-                                riderRankings.get(i).setSegmentPoints(segment, HCPointsArr[i]);
-                                break;
-                            case 1:
-                                riderRankings.get(i).setSegmentPoints(segment, HCPointsArr[i]);
-                                break;
-                            case 2:
-                                riderRankings.get(i).setSegmentPoints(segment, HCPointsArr[i]);
-                                break;
-                            case 3:
-                                riderRankings.get(i).setSegmentPoints(segment, HCPointsArr[i]);
-                                break;
-                            case 4:
-                                riderRankings.get(i).setSegmentPoints(segment, HCPointsArr[i]);
-                                break;
-                            case 5:
-                                riderRankings.get(i).setSegmentPoints(segment, HCPointsArr[i]);
-                                break;
-                            case 6:
-                                riderRankings.get(i).setSegmentPoints(segment, HCPointsArr[i]);
-                                break;
-                            case 7:
-                                riderRankings.get(i).setSegmentPoints(segment, HCPointsArr[i]);
-                                break;
-                            default:
-                                riderRankings.get(i).setSegmentPoints(segment, 0);
-                        }
-                    case C1:
-                        switch (i) {
-                            case 0:
-                                riderRankings.get(i).setSegmentPoints(segment, OneCPointsArr[i]);
-                                break;
-                            case 1:
-                                riderRankings.get(i).setSegmentPoints(segment, OneCPointsArr[i]);
-                                break;
-                            case 2:
-                                riderRankings.get(i).setSegmentPoints(segment, OneCPointsArr[i]);
-                                break;
-                            case 3:
-                                riderRankings.get(i).setSegmentPoints(segment, OneCPointsArr[i]);
-                                break;
-                            case 4:
-                                riderRankings.get(i).setSegmentPoints(segment, OneCPointsArr[i]);
-                                break;
-                            case 5:
-                                riderRankings.get(i).setSegmentPoints(segment, OneCPointsArr[i]);
-                                break;
-                            default:
-                                riderRankings.get(i).setSegmentPoints(segment, 0);
-                        }
-                    case C2:
-                        switch (i) {
-                            case 0:
-                                riderRankings.get(i).setSegmentPoints(segment, TwoCPointsArr[i]);
-                                break;
-                            case 1:
-                                riderRankings.get(i).setSegmentPoints(segment, TwoCPointsArr[i]);
-                                break;
-                            case 2:
-                                riderRankings.get(i).setSegmentPoints(segment, TwoCPointsArr[i]);
-                                break;
-                            case 3:
-                                riderRankings.get(i).setSegmentPoints(segment, TwoCPointsArr[i]);
-                                break;
-                            default:
-                                riderRankings.get(i).setSegmentPoints(segment, 0);
-                        }
-                    case C3:
-                        switch (i) {
-                            case 0:
-                                riderRankings.get(i).setSegmentPoints(segment, ThreeCPointsArr[i]);
-                                break;
-                            case 1:
-                                riderRankings.get(i).setSegmentPoints(segment, ThreeCPointsArr[i]);
-                                break;
-                            default:
-                                riderRankings.get(i).setSegmentPoints(segment, 0);
-                        }
-                    case C4:
-                        switch (i) {
-                            case 0:
-                                riderRankings.get(i).setSegmentPoints(segment, 1);
-                                break;
-                            default:
-                                riderRankings.get(i).setSegmentPoints(segment, 0);
-                        }
+                                rider.setSegmentPoints(segment, HCPointsArr[i]);
+                            }
+                            else {
+                                rider.setSegmentPoints(segment, 0);
+                            }
+                            break;
+                        case C1:
+                            if (i<6) {
+
+                                rider.setSegmentPoints(segment, OneCPointsArr[i]);
+                            }
+                            else {
+                                rider.setSegmentPoints(segment, 0);
+                            }
+                            break;
+                        case C2:
+                            if (i<4) {
+                                rider.setSegmentPoints(segment, TwoCPointsArr[i]);
+                            }
+                            else {
+                                rider.setSegmentPoints(segment, 0);
+                            }
+                            break;
+                        case C3:
+                            if (i<2) {
+                                rider.setSegmentPoints(segment, ThreeCPointsArr[i]);
+                            }
+                            else {
+                                rider.setSegmentPoints(segment, 0);
+                            }
+                            break;
+                        case C4:
+                            if (i == 0) {
+                                rider.setSegmentPoints(segment, 1);
+                            } else {
+                                rider.setSegmentPoints(segment, 0);
+                            }
+                            break;
+                    }
                 }
+        }
+
+        for (Rider rider :riders) {
+            for (Segment segment : segmentsMap.values()) {
+                System.out.println(rider.getSegmentPoints(segment) + ", " + rider.getName());
             }
         }
+
+    }
+
+    public int getMountainPointsForRider(Rider rider) {
+        int total = 0;
+        int count = 0;
+        for (Segment segment: segmentsMap.values()) {
+            total = total + rider.getSegmentPoints(segment);
+        }
+        return total;
     }
 
 }

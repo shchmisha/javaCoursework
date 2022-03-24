@@ -5,10 +5,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 public class Rider {
     private int teamID;
@@ -50,8 +47,9 @@ public class Rider {
         return this.segmentResults.get(segment);
     }
 
-    public void setSegmentPoints(Segment segment, int points) {
+    public int setSegmentPoints(Segment segment, int points) {
         this.segmentPoints.put(segment, points);
+        return this.getSegmentPoints(segment);
     }
 
     public int getSegmentPoints(Segment segment) {
@@ -121,7 +119,6 @@ public class Rider {
             Segment curSegment = segments.get(i);
             this.segmentResults.put(curSegment, checkpointsDuration.get(i));
         }
-//        this.setSprintPoints(stage);
     }
 
     public LocalTime[] getStageResults(Stage stage) {
@@ -154,17 +151,6 @@ public class Rider {
                 break;
         }
     }
-
-    public int getMountainPoints(Stage stage) {
-        stage.setResultsForSegment();
-        int total = 0;
-        for (Segment segment : stage.getSegments()) {
-            total = total + this.getSegmentPoints(segment);
-        }
-        return total;
-    }
-
-
 
 
 }

@@ -1,11 +1,12 @@
 package cycling;
 
-import java.io.IOException;
+import java.io.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class CyclingPortal implements CyclingPortalInterface {
@@ -27,6 +28,10 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public int[] getRidersGeneralClassificationRank(int raceId) throws IDNotRecognisedException {
+        Race race = races.get(raceId);
+        for (Stage stage : Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new)) {
+
+        }
         return new int[0];
     }
 
@@ -42,6 +47,12 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public int[] getRidersMountainPointsInRace(int raceId) throws IDNotRecognisedException {
+        Race race = races.get(raceId);
+
+//        Stage stage = stages.get(stageId);
+//        Rider rider = riders.get(riderId);
+//        stage.setResultsForSegment();
+//        return stage.getMountainPointsForRider(rider);
         return new int[0];
     }
 
@@ -260,27 +271,81 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public int[] getRidersMountainPointsInStage(int stageId) throws IDNotRecognisedException {
-        return new int[0];
-    }
-
-    @Override
-    public void eraseCyclingPortal() {
-
-    }
-
-    @Override
-    public void saveCyclingPortal(String filename) throws IOException {
-
-    }
-
-    @Override
-    public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
-
-    }
-
-    public int getMountainPoints(int stageId, int riderId) {
-        Rider rider = riders.get(riderId);
         Stage stage = stages.get(stageId);
-        return rider.getMountainPoints(stage);
+        ArrayList<Integer> mountainPoints = new ArrayList<>();
+        stage.setResultsForSegment();
+        for (Rider rider : stage.getStageRidersRanking()) {
+            mountainPoints.add(stage.getMountainPointsForRider(rider));
+        }
+        int[] points = new int[mountainPoints.size()];
+        for (int i=0; i<mountainPoints.size(); i++){
+            points[i] = mountainPoints.get(i);
+        }
+        return points;
     }
+
+    @Override
+
+    public void eraseCyclingPortal() {
+        // clear all the hashMaps int all classes
+        segments.clear();
+        stages.clear();
+        teams.clear();
+        riders.clear();
+        races.clear();
+    }
+
+    @Override
+
+    public void saveCyclingPortal(String filename) throws IOException {
+        FileOutputStream fileOutput = null;
+        ObjectOutputStream objectOutput = null;
+        try {
+            fileOutput = new FileOutputStream(filename);
+            objectOutput = new ObjectOutputStream(fileOutput);
+            objectOutput.writeObject(this);
+            objectOutput.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+
+    public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
+        System.out.print("I've made it this far");
+        CyclingPortal loadedCyclingPortal = null;
+        FileInputStream fileInput = null;
+        ObjectInputStream objectInput = null;
+        try{
+            fileInput = new FileInputStream(filename);
+            objectInput = new ObjectInputStream(fileInput);
+            loadedCyclingPortal = (CyclingPortal) objectInput.readObject();
+            System.out.print("I've made it this far");
+
+            objectInput.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+
+//    public int getMountainPoints(int stageId, int riderId) {
+//        Stage stage = stages.get(stageId);
+//        Rider rider = riders.get(riderId);
+//        stage.setResultsForSegment();
+//        return stage.getMountainPointsForRider(rider);
+////        for (Rider rider : stage.getStageRiders()) {
+////            System.out.println(stage.getSegmentPointsForRider(rider) + ", " + rider.getId());
+////        }
+//
+//
+//
+//    }
+
+
 }
