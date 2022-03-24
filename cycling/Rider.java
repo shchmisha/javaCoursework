@@ -1,5 +1,6 @@
 package cycling;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -7,7 +8,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-public class Rider {
+public class Rider implements Serializable {
     private int teamID;
     String name;
     int yearOfBirth;

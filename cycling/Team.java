@@ -1,8 +1,9 @@
 package cycling;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Team {
+public class Team implements Serializable {
     String name;
     String description;
     private int teamID;

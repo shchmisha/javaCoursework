@@ -285,7 +285,6 @@ public class CyclingPortal implements CyclingPortalInterface {
     }
 
     @Override
-
     public void eraseCyclingPortal() {
         // clear all the hashMaps int all classes
         segments.clear();
@@ -296,44 +295,37 @@ public class CyclingPortal implements CyclingPortalInterface {
     }
 
     @Override
-
     public void saveCyclingPortal(String filename) throws IOException {
-        FileOutputStream fileOutput = null;
-        ObjectOutputStream objectOutput = null;
-        try {
-            fileOutput = new FileOutputStream(filename);
-            objectOutput = new ObjectOutputStream(fileOutput);
-            objectOutput.writeObject(this);
-            objectOutput.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        IdDatabase idDatabase = new IdDatabase(races, stages, teams, riders, segments);
 
+        FileOutputStream fileOut = new FileOutputStream(filename);
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        out.writeObject(idDatabase);
+        out.close();
+        fileOut.close();
+//        copy all  hashmaps to the id database
+//        serialize this id database
     }
 
     @Override
-
     public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
-        System.out.print("I've made it this far");
-        CyclingPortal loadedCyclingPortal = null;
-        FileInputStream fileInput = null;
-        ObjectInputStream objectInput = null;
-        try{
-            fileInput = new FileInputStream(filename);
-            objectInput = new ObjectInputStream(fileInput);
-            loadedCyclingPortal = (CyclingPortal) objectInput.readObject();
-            System.out.print("I've made it this far");
+//        deserialize idDatabase
+//        set hashmaps to the equivalent hashmaps of the id database
+        IdDatabase idDatabase = null;
 
-            objectInput.close();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
+        FileInputStream fileIn = new FileInputStream(filename);
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        idDatabase = (IdDatabase) in.readObject();
+        in.close();
+        fileIn.close();
+
+        this.races = idDatabase.races;
+        this.stages = idDatabase.stages;
+        this.riders = idDatabase.riders;
+        this.teams = idDatabase.teams;
+        this.segments = idDatabase.segments;
+
     }
-
 //    public int getMountainPoints(int stageId, int riderId) {
 //        Stage stage = stages.get(stageId);
 //        Rider rider = riders.get(riderId);
@@ -346,6 +338,4 @@ public class CyclingPortal implements CyclingPortalInterface {
 //
 //
 //    }
-
-
 }
