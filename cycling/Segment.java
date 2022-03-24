@@ -2,6 +2,7 @@ package cycling;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Segment implements Serializable {
@@ -36,7 +37,6 @@ class CategorizedClimb extends Segment{
     }
 
 
-
     public String toString() {
         return stageId + " " + location + " " + type + " " + averageGradient + " " + length;
     }
@@ -67,6 +67,8 @@ class CategorizedClimb extends Segment{
     public void setStageId(int stageId){
         this.stageId = stageId;
     }
+
+
 }
 
 class IntermediateSprint extends Segment {
@@ -74,6 +76,7 @@ class IntermediateSprint extends Segment {
     public IntermediateSprint(int stageId, Double location) {
         this.stageId = stageId;
         this.location = location;
+        this.type = SegmentType.SPRINT;
         segmentId = count++;
     }
 

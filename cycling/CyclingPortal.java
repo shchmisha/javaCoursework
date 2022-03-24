@@ -277,4 +277,10 @@ public class CyclingPortal implements CyclingPortalInterface {
     public void loadCyclingPortal(String filename) throws IOException, ClassNotFoundException {
 
     }
+
+    public int getMountainPoints(int stageId, int riderId) {
+        Rider rider = riders.get(riderId);
+        Stage stage = stages.get(stageId);
+        return rider.getMountainPoints(stage);
+    }
 }

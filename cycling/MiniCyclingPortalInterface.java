@@ -9,16 +9,16 @@ import java.time.LocalTime;
  * MiniCyclingPortalInterface interface. The no-argument constructor of a class
  * implementing this interface should initialise the MiniCyclingPortalInterface as
  * an empty platform with no initial racing teams nor races within it.
- * 
+ *
  * @author Diogo Pacheco
- * @version 1.1
+ * @version 1.2
  *
  */
 public interface MiniCyclingPortalInterface extends Serializable {
 
 	/**
 	 * Get the races currently created in the platform.
-	 * 
+	 *
 	 * @return An array of race IDs in the system or an empty array if none exists.
 	 */
 	int[] getRaceIds();
@@ -29,14 +29,14 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param name        Race's name.
 	 * @param description Race's description (can be null).
 	 * @throws IllegalNameException If the name already exists in the platform.
 	 * @throws InvalidNameException If the name is null, empty, has more than 30
 	 *                              characters, or has white spaces.
 	 * @return the unique ID of the created race.
-	 * 
+	 *
 	 */
 	int createRace(String name, String description) throws IllegalNameException, InvalidNameException;
 
@@ -45,7 +45,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param raceId The ID of the race being queried.
 	 * @return Any formatted string containing the race ID, name, description, the
 	 *         number of stages, and the total length (i.e., the sum of all stages'
@@ -61,7 +61,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param raceId The ID of the race to be removed.
 	 * @throws IDNotRecognisedException If the ID does not match to any race in the
 	 *                                  system.
@@ -73,7 +73,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param raceId The ID of the race being queried.
 	 * @return The number of stages created for the race.
 	 * @throws IDNotRecognisedException If the ID does not match to any race in the
@@ -86,7 +86,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param raceId      The race which the stage will be added to.
 	 * @param stageName   An identifier name for the stage.
 	 * @param description A descriptive text for the stage.
@@ -99,12 +99,12 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * @throws IDNotRecognisedException If the ID does not match to any race in the
 	 *                                  system.
 	 * @throws IllegalNameException     If the name already exists in the platform.
-	 * @throws InvalidNameException     If the new name is null, empty, has more
-	 *                                  than 30.
+	 * @throws InvalidNameException     If the name is null, empty, has more than 30
+	 *                              	characters, or has white spaces.
 	 * @throws InvalidLengthException   If the length is less than 5km.
 	 */
 	int addStageToRace(int raceId, String stageName, String description, double length, LocalDateTime startTime,
-			StageType type)
+					   StageType type)
 			throws IDNotRecognisedException, IllegalNameException, InvalidNameException, InvalidLengthException;
 
 	/**
@@ -112,10 +112,10 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param raceId The ID of the race being queried.
-	 * @return The list of stage IDs ordered (from first to last) by their sequence in the
-	 *         race.
+	 * @return An array of stage IDs ordered (from first to last) by their sequence in the
+	 *         race or an empty array if none exists.
 	 * @throws IDNotRecognisedException If the ID does not match to any race in the
 	 *                                  system.
 	 */
@@ -126,7 +126,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage being queried.
 	 * @return The stage's length.
 	 * @throws IDNotRecognisedException If the ID does not match to any stage in the
@@ -139,7 +139,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage being removed.
 	 * @throws IDNotRecognisedException If the ID does not match to any stage in the
 	 *                                  system.
@@ -151,7 +151,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId         The ID of the stage to which the climb segment is
 	 *                        being added.
 	 * @param location        The kilometre location where the climb finishes within
@@ -171,7 +171,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 *                                    segment.
 	 */
 	int addCategorizedClimbToStage(int stageId, Double location, SegmentType type, Double averageGradient,
-			Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
+								   Double length) throws IDNotRecognisedException, InvalidLocationException, InvalidStageStateException,
 			InvalidStageTypeException;
 
 	/**
@@ -179,7 +179,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId  The ID of the stage to which the intermediate sprint segment
 	 *                 is being added.
 	 * @param location The kilometre location where the intermediate sprint finishes
@@ -201,7 +201,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param segmentId The ID of the segment to be removed.
 	 * @throws IDNotRecognisedException   If the ID does not match to any segment in
 	 *                                    the system.
@@ -215,7 +215,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage to be concluded.
 	 * @throws IDNotRecognisedException   If the ID does not match to any stage in
 	 *                                    the system.
@@ -228,7 +228,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage being queried.
 	 * @return The list of segment IDs ordered (from first to last) by their location in the
 	 *         stage.
@@ -242,13 +242,13 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param name        The identifier name of the team.
 	 * @param description A description of the team.
 	 * @return The ID of the created team.
 	 * @throws IllegalNameException If the name already exists in the platform.
-	 * @throws InvalidNameException If the new name is null, empty, has more than
-	 *                              30 characters.
+	 * @throws InvalidNameException If the name is null, empty, has more than 30
+	 *                              characters, or has white spaces.
 	 */
 	int createTeam(String name, String description) throws IllegalNameException, InvalidNameException;
 
@@ -257,7 +257,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param teamId The ID of the team to be removed.
 	 * @throws IDNotRecognisedException If the ID does not match to any team in the
 	 *                                  system.
@@ -269,10 +269,10 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @return The list of IDs from the teams in the system. An empty list if there
 	 *         are no teams in the system.
-	 * 
+	 *
 	 */
 	int[] getTeams();
 
@@ -281,7 +281,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param teamId The ID of the team being queried.
 	 * @return A list with riders' ID.
 	 * @throws IDNotRecognisedException If the ID does not match to any team in the
@@ -294,7 +294,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param teamID      The ID rider's team.
 	 * @param name        The name of the rider.
 	 * @param yearOfBirth The year of birth of the rider.
@@ -312,7 +312,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param riderId The ID of the rider to be removed.
 	 * @throws IDNotRecognisedException If the ID does not match to any rider in the
 	 *                                  system.
@@ -324,7 +324,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId     The ID of the stage the result refers to.
 	 * @param riderId     The ID of the rider.
 	 * @param checkpoints An array of times at which the rider reached each of the
@@ -352,7 +352,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage the result refers to.
 	 * @param riderId The ID of the rider.
 	 * @return The array of times at which the rider reached each of the segments of
@@ -379,11 +379,11 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage the result refers to.
 	 * @param riderId The ID of the rider.
-	 * @return The adjusted elapsed time for the rider in the stage. Return an empty
-	 *         array if there is no result registered for the rider in the stage.
+	 * @return The adjusted elapsed time for the rider in the stage. Return null if
+	 * 		  there is no result registered for the rider in the stage.
 	 * @throws IDNotRecognisedException   If the ID does not match to any rider or
 	 *                                    stage in the system.
 	 */
@@ -395,7 +395,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage the result refers to.
 	 * @param riderId The ID of the rider.
 	 * @throws IDNotRecognisedException If the ID does not match to any rider or
@@ -408,7 +408,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage being queried.
 	 * @return A list of riders ID sorted by their elapsed time. An empty list if
 	 *         there is no result for the stage.
@@ -422,7 +422,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage being queried.
 	 * @return The ranked list of adjusted elapsed times sorted by their finish
 	 *         time. An empty list if there is no result for the stage. These times
@@ -438,7 +438,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage being queried.
 	 * @return The ranked list of points each riders received in the stage, sorted
 	 *         by their elapsed time. An empty list if there is no result for the
@@ -454,7 +454,7 @@ public interface MiniCyclingPortalInterface extends Serializable {
 	 * <p>
 	 * The state of this MiniCyclingPortalInterface must be unchanged if any
 	 * exceptions are thrown.
-	 * 
+	 *
 	 * @param stageId The ID of the stage being queried.
 	 * @return The ranked list of mountain points each riders received in the stage,
 	 *         sorted by their finish time. An empty list if there is no result for

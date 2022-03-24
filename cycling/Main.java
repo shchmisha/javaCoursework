@@ -45,6 +45,8 @@ public class Main {
             System.out.println(i);
         }
 
+        System.out.println(g.getMountainPoints(100, 100));
+
     }
 }
 

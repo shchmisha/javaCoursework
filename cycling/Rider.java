@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class Rider {
-    private static final long serialVersionUID=1;
     private int teamID;
     String name;
     int yearOfBirth;
@@ -19,7 +18,9 @@ public class Rider {
     private int riderId;
     private HashMap<Stage, Duration> stageResults = new HashMap<>();
     private HashMap<Segment, Duration> segmentResults = new HashMap<>();
+
     private HashMap<Stage, Integer> stagePoints = new HashMap<>();
+    private HashMap<Segment, Integer> segmentPoints = new HashMap<>();
 
     private HashMap<Stage, Integer> sprintPoints = new HashMap<>();
     private int[] flatPointsArr = new int[] {50, 30, 20, 18, 16, 14, 12, 10, 8, 7, 6, 5, 4, 3, 2};
@@ -43,6 +44,18 @@ public class Rider {
 
     public int getId() {
         return this.riderId;
+    }
+
+    public Duration getSegmentResult(Segment segment) {
+        return this.segmentResults.get(segment);
+    }
+
+    public void setSegmentPoints(Segment segment, int points) {
+        this.segmentPoints.put(segment, points);
+    }
+
+    public int getSegmentPoints(Segment segment) {
+        return this.segmentPoints.get(segment);
     }
 
     public int getTeamId() {
@@ -141,6 +154,17 @@ public class Rider {
                 break;
         }
     }
+
+    public int getMountainPoints(Stage stage) {
+        stage.setResultsForSegment();
+        int total = 0;
+        for (Segment segment : stage.getSegments()) {
+            total = total + this.getSegmentPoints(segment);
+        }
+        return total;
+    }
+
+
 
 
 }
