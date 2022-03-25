@@ -153,12 +153,32 @@ public class Stage implements Serializable {
         int[] OneCPointsArr = new int[] {10, 8, 6, 4, 2, 1};
         int[] TwoCPointsArr = new int[] {5, 3, 2, 1};
         int[] ThreeCPointsArr = new int[] {2, 1};
+        int[] intSprintPointsArr = new int[] {20, 17, 15, 13, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 //        for (int i=0; i<HCPointsArr.length; i++) {
 //            System.out.println(HCPointsArr[i]);
 //        }
 
 
         for (Segment segment : segmentsMap.values()) {
+            if (segment.type == SegmentType.SPRINT) {
+                ArrayList<Rider> segmentRiderRankings = new ArrayList<>(riders);
+                for (int i = 0; i < segmentRiderRankings.size() - 1; i++) {
+                    for (int j = 0; j < segmentRiderRankings.size() - i - 1; j++) {
+                        if (segmentRiderRankings.get(j).getSegmentResult(segment).compareTo(segmentRiderRankings.get(j + 1).getSegmentResult(segment)) > 0) {
+                            Collections.swap(segmentRiderRankings, j, j + 1);
+                        }
+                    }
+                }
+                for (Rider rider : segmentRiderRankings) {
+//                    rider.setSegmentPoints(segment, count++);
+                    int i = segmentRiderRankings.indexOf(rider);
+                    if (i<15){
+                        rider.setSegmentPoints(segment, intSprintPointsArr[i]);
+                    } else {
+                        rider.setSegmentPoints(segment, 0);
+                    }
+                }
+            } else {
 //                System.out.println(riders);
                 ArrayList<Rider> segmentRiderRankings = new ArrayList<>(riders);
 
@@ -222,21 +242,23 @@ public class Stage implements Serializable {
                             break;
                     }
                 }
-        }
-
-        for (Rider rider :riders) {
-            for (Segment segment : segmentsMap.values()) {
-                System.out.println(rider.getSegmentPoints(segment) + ", " + rider.getName());
             }
         }
 
+//        for (Rider rider :riders) {
+//            for (Segment segment : segmentsMap.values()) {
+//                System.out.println(rider.getSegmentPoints(segment) + ", " + rider.getName());
+//            }
+//        }
     }
+
 
     public int getMountainPointsForRider(Rider rider) {
         int total = 0;
-        int count = 0;
         for (Segment segment: segmentsMap.values()) {
-            total = total + rider.getSegmentPoints(segment);
+            if (segment.type != SegmentType.SPRINT) {
+                total = total + rider.getSegmentPoints(segment);
+            }
         }
         return total;
     }

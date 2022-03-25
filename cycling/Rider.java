@@ -17,17 +17,16 @@ public class Rider implements Serializable {
     private HashMap<Stage, Duration> stageResults = new HashMap<>();
     private HashMap<Segment, Duration> segmentResults = new HashMap<>();
 
-    private HashMap<Stage, Integer> stagePoints = new HashMap<>();
+    private HashMap<Segment, Integer> sprintPoints = new HashMap<>();
     private HashMap<Segment, Integer> segmentPoints = new HashMap<>();
 
 //    private HashMap<Race, Integer> raceGCPoints = new HashMap<>();
 
-    private HashMap<Stage, Integer> sprintPoints = new HashMap<>();
+    private HashMap<Stage, Integer> stagePoints = new HashMap<>();
     private int[] flatPointsArr = new int[] {50, 30, 20, 18, 16, 14, 12, 10, 8, 7, 6, 5, 4, 3, 2};
     private int[] midMntnPointsArr = new int[] {30, 25, 22, 19, 17, 15, 13, 11, 9, 7, 6, 5, 4, 3, 2};
     private int[] highMntnPointsArr = new int[] {20, 17, 15, 13, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     private int[] timeTrialPointsArr = new int[] {20, 17, 15, 13, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    private int[] intSprintPointsArr = new int[] {20, 17, 15, 13, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
 
 
@@ -59,7 +58,10 @@ public class Rider implements Serializable {
         ArrayList<Stage> raceStages = race.getRaceStages();
         int total = 0;
         for (Stage stage : raceStages) {
-            total = total + this.sprintPoints.get(stage);
+            total = total + this.stagePoints.get(stage);
+            for (Segment segment : stage.getSegments()) {
+                total = total + this.segmentPoints.get(segment);
+            }
         }
         return total;
     }
@@ -124,7 +126,7 @@ public class Rider implements Serializable {
 //    }
 
     public int getRiderPointsForStage(Stage stage) {
-        return this.sprintPoints.get(stage);
+        return this.stagePoints.get(stage);
     }
 
 //    public int getPointsInStage(Stage stage) {
@@ -173,16 +175,16 @@ public class Rider implements Serializable {
         int rank = stage.getRiderRanking(this.riderId);
         switch (type) {
             case FLAT:
-                sprintPoints.put(stage, flatPointsArr[rank]);
+                stagePoints.put(stage, flatPointsArr[rank]);
                 break;
             case MEDIUM_MOUNTAIN:
-                sprintPoints.put(stage, midMntnPointsArr[rank]);
+                stagePoints.put(stage, midMntnPointsArr[rank]);
                 break;
             case HIGH_MOUNTAIN:
-                sprintPoints.put(stage, highMntnPointsArr[rank]);
+                stagePoints.put(stage, highMntnPointsArr[rank]);
                 break;
             case TT:
-                sprintPoints.put(stage, timeTrialPointsArr[rank]);
+                stagePoints.put(stage, timeTrialPointsArr[rank]);
                 break;
         }
     }
