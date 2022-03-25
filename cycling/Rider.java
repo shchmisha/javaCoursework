@@ -17,7 +17,6 @@ public class Rider implements Serializable {
     private HashMap<Stage, Duration> stageResults = new HashMap<>();
     private HashMap<Segment, Duration> segmentResults = new HashMap<>();
 
-    private HashMap<Segment, Integer> sprintPoints = new HashMap<>();
     private HashMap<Segment, Integer> segmentPoints = new HashMap<>();
 
     private HashMap<Stage, Duration> adjustedElapsedTime = new HashMap<>();
@@ -35,6 +34,11 @@ public class Rider implements Serializable {
         this.name = name;
         this.yearOfBirth = yearOfBirth;
         this.riderId = count++;
+    }
+
+
+    public HashMap<Stage, Duration> getStageResults(){
+        return this.stageResults;
     }
 
     public void setAdjustedElapsedTime(Stage stage, Duration time) {

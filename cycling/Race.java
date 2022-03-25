@@ -21,10 +21,20 @@ public class Race implements Serializable {
         this.description = description;
     }
 
+    /**
+     * Get the race name
+     *
+     * @return race name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Get the race details
+     *
+     * @return race details
+     */
     public String getDetails() {
         return this.name + " " + this.description;
     }
@@ -33,11 +43,21 @@ public class Race implements Serializable {
         return stages.size();
     }
 
+    /**
+     * Get the riders finished position in a a stage.
+     * <p>
+     * The state of this MiniCyclingPortalInterface must be unchanged if any
+     * exceptions are thrown.
+     *
+     * @param stage The stage to be stored in the hashmap.
+     */
     public void addStage(Stage stage) {
         stages.put(stage.getStageId(), stage);
         stage.setRaceId(id);
     }
+
     public int getId() { return this.id; }
+
 
     public int[] getStages(){
         ArrayList<Integer> arr= new ArrayList<Integer>();
@@ -48,6 +68,7 @@ public class Race implements Serializable {
 
         return stageIds;
     }
+
 
     public ArrayList<Stage> getRaceStages() {
         ArrayList<Stage> arr = new ArrayList<>();

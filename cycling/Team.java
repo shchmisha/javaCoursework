@@ -7,7 +7,7 @@ public class Team implements Serializable {
     String name;
     String description;
     private int teamID;
-    static int n = 200;
+    static int n = 100;
     HashMap<Integer, Rider> riders = new HashMap<Integer, Rider>();
 
     public Team(String name, String description){
@@ -16,6 +16,12 @@ public class Team implements Serializable {
         this.teamID = n++;
 
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+
 
     public int getId() {
         return this.teamID;

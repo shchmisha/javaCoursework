@@ -38,6 +38,10 @@ public class Stage implements Serializable {
         this.stageType = type;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public ArrayList<Rider> getStageRiders() {
         return this.riders;
     }
