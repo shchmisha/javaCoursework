@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class CyclingPortal implements CyclingPortalInterface {
@@ -28,20 +29,71 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public int[] getRidersGeneralClassificationRank(int raceId) throws IDNotRecognisedException {
+//        A ranked list of riders' IDs sorted ascending by the sum of their
+//	         adjusted elapsed times in all stages of the race. That is, the first
+//	         in this list is the winner (least time). An empty list if there is no
+//	         result for any stage in the race.
         Race race = races.get(raceId);
-        for (Stage stage : Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new)) {
+        Stage[] raceStages = Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new);
 
+        ArrayList<Rider> riderRankings = raceStages[0].getStageRidersRanking();
+        raceStages[0].getRiderPoints();
+        for (int i=0; i<riderRankings.size()-1; i++) {
+            for (int j=0; j<riderRankings.size()-i-1;j++){
+                if (riderRankings.get(j).getRaceGCPoints(race) > riderRankings.get(j+1).getRaceGCPoints(race)) {
+                    Collections.swap(riderRankings, j, j+1);
+                }
+            }
         }
-        return new int[0];
+        int[] rank = new int[riderRankings.size()];
+        for (int i=0; i<riderRankings.size(); i++) {
+            rank[i] = riderRankings.get(i).getId();
+        }
+
+
+
+        return rank;
     }
 
     @Override
     public LocalTime[] getGeneralClassificationTimesInRace(int raceId) throws IDNotRecognisedException {
+
         return new LocalTime[0];
     }
 
     @Override
     public int[] getRidersPointsInRace(int raceId) throws IDNotRecognisedException {
+//        A list of riders' points (i.e., the sum of their points in all stages
+//        of the race), sorted by the total elapsed time. An empty list if
+//	      there is no result for any stage in the race. These points should
+//        match the riders returned by {@link #getRidersGeneralClassificationRank(int)}.
+
+        Race race = races.get(raceId);
+        Stage[] raceStages = Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new);
+        raceStages[0].getRiderPoints();
+
+        ArrayList<Rider> riderRankings = raceStages[0].getStageRidersRanking();
+
+        for (int i = 0; i < riderRankings.size() - 1; i++) {
+            for (int j = 0; j < riderRankings.size() - i - 1; j++) {
+                if (riderRankings.get(j).getTotalElapsedTime(race).compareTo(riderRankings.get(j).getTotalElapsedTime(race)) > 0) {
+                    Collections.swap(riderRankings, j, j + 1);
+                }
+            }
+        }
+
+        ArrayList<Integer> points = new ArrayList<>();
+        for (Rider rider : riderRankings) {
+            points.add(rider.getRaceGCPoints(race));
+        }
+        int[] rank = new int[points.size()];
+        for (int i=0; i<points.size(); i++) {
+            rank[i] = points.get(i);
+        }
+//        array of riders total scores
+//        sort the array
+//        reverse the array
+//        return the array
         return new int[0];
     }
 

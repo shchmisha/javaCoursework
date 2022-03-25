@@ -10,12 +10,6 @@ public class Race implements Serializable {
     private int id;
     private String name;
     private String description;
-
-    private int[] teams;
-    private int[] riders;
-    private int[] GCResults;
-    private int[] pointsResults;
-    private int[] mountainResults;
     private int totalLength;
     private static int counter=100;
     private static int numberOfStages;
@@ -53,6 +47,14 @@ public class Race implements Serializable {
         int[] stageIds = arr.stream().mapToInt(i -> i).toArray();
 
         return stageIds;
+    }
+
+    public ArrayList<Stage> getRaceStages() {
+        ArrayList<Stage> arr = new ArrayList<>();
+        for (Stage stage : stages.values()) {
+            arr.add(stage);
+        }
+        return arr;
     }
 
 

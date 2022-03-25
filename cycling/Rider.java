@@ -20,6 +20,8 @@ public class Rider implements Serializable {
     private HashMap<Stage, Integer> stagePoints = new HashMap<>();
     private HashMap<Segment, Integer> segmentPoints = new HashMap<>();
 
+//    private HashMap<Race, Integer> raceGCPoints = new HashMap<>();
+
     private HashMap<Stage, Integer> sprintPoints = new HashMap<>();
     private int[] flatPointsArr = new int[] {50, 30, 20, 18, 16, 14, 12, 10, 8, 7, 6, 5, 4, 3, 2};
     private int[] midMntnPointsArr = new int[] {30, 25, 22, 19, 17, 15, 13, 11, 9, 7, 6, 5, 4, 3, 2};
@@ -53,6 +55,38 @@ public class Rider implements Serializable {
         return this.getSegmentPoints(segment);
     }
 
+    public int getRaceGCPoints(Race race) {
+        ArrayList<Stage> raceStages = race.getRaceStages();
+        int total = 0;
+        for (Stage stage : raceStages) {
+            total = total + this.sprintPoints.get(stage);
+        }
+        return total;
+    }
+
+    public Duration getTotalElapsedTime(Race race) {
+        ArrayList<Stage> raceStages = race.getRaceStages();
+        Duration total = Duration.ZERO;
+        for (Stage stage : raceStages) {
+            total = this.stageResults.get(stage).plus(total);
+        }
+//        return LocalTime.MIDNIGHT.plus(total.toSeconds(), ChronoUnit.SECONDS);
+        return total;
+    }
+
+//    public int getRaceGCTimes(Race race) {
+//        ArrayList<Stage> raceStages = race.getRaceStages();
+//        LocalTime total = 0;
+//        for (Stage stage : raceStages) {
+//            total = total + this.sprintPoints.get(stage);
+//        }
+//        return total;
+//    }
+
+//    public int getRaceCGPoints(Race race) {
+//        return this.raceGCPoints.get(race);
+//    }
+
     public int getSegmentPoints(Segment segment) {
         return this.segmentPoints.get(segment);
     }
@@ -85,17 +119,17 @@ public class Rider implements Serializable {
         return this.stageResults.containsKey(stageId);
     }
 
-    public void setRiderPointsForStage(Stage stage, int points) {
-        this.stagePoints.put(stage, points);
-    }
+//    public void setRiderPointsForStage(Stage stage, int points) {
+//        this.stagePoints.put(stage, points);
+//    }
 
     public int getRiderPointsForStage(Stage stage) {
         return this.sprintPoints.get(stage);
     }
 
-    public int getPointsInStage(Stage stage) {
-        return this.sprintPoints.get(stage);
-    }
+//    public int getPointsInStage(Stage stage) {
+//        return this.sprintPoints.get(stage);
+//    }
 
     public void setStageResults(Stage stage, LocalTime... checkpoints) {
         LocalTime first = stage.getStartTime().toLocalTime();
