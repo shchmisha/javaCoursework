@@ -20,7 +20,7 @@ public class Rider implements Serializable {
     private HashMap<Segment, Integer> sprintPoints = new HashMap<>();
     private HashMap<Segment, Integer> segmentPoints = new HashMap<>();
 
-//    private HashMap<Race, Integer> raceGCPoints = new HashMap<>();
+    private HashMap<Stage, Duration> adjustedElapsedTime = new HashMap<>();
 
     private HashMap<Stage, Integer> stagePoints = new HashMap<>();
     private int[] flatPointsArr = new int[] {50, 30, 20, 18, 16, 14, 12, 10, 8, 7, 6, 5, 4, 3, 2};
@@ -35,6 +35,14 @@ public class Rider implements Serializable {
         this.name = name;
         this.yearOfBirth = yearOfBirth;
         this.riderId = count++;
+    }
+
+    public void setAdjustedElapsedTime(Stage stage, Duration time) {
+        this.adjustedElapsedTime.put(stage, time);
+    }
+
+    public Duration getAdjustedElapsedTime(Stage stage) {
+        return this.adjustedElapsedTime.get(stage);
     }
 
     public int getYearOfBirth() {

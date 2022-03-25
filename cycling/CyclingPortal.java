@@ -289,7 +289,11 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public LocalTime getRiderAdjustedElapsedTimeInStage(int stageId, int riderId) throws IDNotRecognisedException {
-        return LocalTime.now();
+        Stage stage = stages.get(stageId);
+        Rider rider = riders.get(riderId);
+        stage.calculateAdjustedElapsedTime();
+        return LocalTime.MIDNIGHT.plus(rider.getAdjustedElapsedTime(stage).toSeconds(), ChronoUnit.SECONDS);
+
     }
 
     @Override

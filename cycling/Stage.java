@@ -1,6 +1,7 @@
 package cycling;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -261,6 +262,18 @@ public class Stage implements Serializable {
             }
         }
         return total;
+    }
+
+
+    public void calculateAdjustedElapsedTime() {
+        ArrayList<Rider> rankings = getStageRidersRanking();
+        rankings.get(0).setAdjustedElapsedTime(this, rankings.get(0).getElapsedTime(this));
+        for (int i=1; i<rankings.size(); i++) {
+            long diff = rankings.get(i).getElapsedTime(this).minus(rankings.get(i-1).getElapsedTime(this)).toMillis();
+            if (diff <= 1_000) {
+                rankings.get(i-1).setAdjustedElapsedTime(this, rankings.get(i).getAdjustedElapsedTime(this));
+            }
+        }
     }
 
 }
