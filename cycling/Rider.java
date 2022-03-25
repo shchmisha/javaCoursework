@@ -65,7 +65,7 @@ public class Rider implements Serializable {
         this.segmentPoints.put(segment, points);
         return this.getSegmentPoints(segment);
     }
-
+    
     public int getRaceGCPoints(Race race) {
         ArrayList<Stage> raceStages = race.getRaceStages();
         int total = 0;
