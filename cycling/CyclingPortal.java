@@ -57,17 +57,35 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public LocalTime[] getGeneralClassificationTimesInRace(int raceId) throws IDNotRecognisedException {
+//        A list of riders' times sorted by the sum of their adjusted elapsed
+//        times in all stages of the race. An empty list if there is no result
+//        for any stage in the race. These times should match the riders
+        Race race = races.get(raceId);
+        Stage[] raceStages = Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new);
+        ArrayList<Rider> riderRankings = raceStages[0].getStageRidersRanking();
+        raceStages[0].getRiderPoints();
+        for (int i=0; i<raceStages.length; i++) {
+            raceStages[i].calculateAdjustedElapsedTime();
+        }
+        for (int i=0; i<riderRankings.size()-1; i++) {
+            for (int j=0; j<riderRankings.size()-i-1;j++){
+                if (riderRankings.get(j).getTotalAdjustedElapsedTime(race).compareTo(riderRankings.get(j+1).getTotalAdjustedElapsedTime(race)) > 0) {
+                    Collections.swap(riderRankings, j, j+1);
+                }
+            }
+        }
 
-        return new LocalTime[0];
+        LocalTime[] rank = new LocalTime[riderRankings.size()];
+        for (int i=0; i<riderRankings.size(); i++) {
+            rank[i] = LocalTime.MIDNIGHT.plus(riderRankings.get(i).getTotalElapsedTime(race).toSeconds(), ChronoUnit.SECONDS);
+        }
+
+
+        return rank;
     }
 
     @Override
     public int[] getRidersPointsInRace(int raceId) throws IDNotRecognisedException {
-//        A list of riders' points (i.e., the sum of their points in all stages
-//        of the race), sorted by the total elapsed time. An empty list if
-//	      there is no result for any stage in the race. These points should
-//        match the riders returned by {@link #getRidersGeneralClassificationRank(int)}.
-
         Race race = races.get(raceId);
         Stage[] raceStages = Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new);
         raceStages[0].getRiderPoints();
@@ -94,28 +112,118 @@ public class CyclingPortal implements CyclingPortalInterface {
 //        sort the array
 //        reverse the array
 //        return the array
-        return new int[0];
+        return rank;
     }
 
     @Override
     public int[] getRidersMountainPointsInRace(int raceId) throws IDNotRecognisedException {
         Race race = races.get(raceId);
+        Stage[] raceStages = Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new);
+        raceStages[0].getRiderPoints();
 
+        ArrayList<Rider> riderRankings = raceStages[0].getStageRidersRanking();
+
+        for (int i = 0; i < riderRankings.size() - 1; i++) {
+            for (int j = 0; j < riderRankings.size() - i - 1; j++) {
+                if (riderRankings.get(j).getTotalElapsedTime(race).compareTo(riderRankings.get(j).getTotalElapsedTime(race)) > 0) {
+                    Collections.swap(riderRankings, j, j + 1);
+                }
+            }
+        }
+
+        ArrayList<Integer> points = new ArrayList<>();
+        for (Rider rider : riderRankings) {
+            points.add(rider.getMountainPoints(race));
+        }
+        int[] mntnpoints = new int[points.size()];
+        for (int i=0; i<points.size(); i++) {
+            mntnpoints[i] = points.get(i);
+        }
 //        Stage stage = stages.get(stageId);
 //        Rider rider = riders.get(riderId);
 //        stage.setResultsForSegment();
 //        return stage.getMountainPointsForRider(rider);
-        return new int[0];
+        return mntnpoints;
     }
 
     @Override
     public int[] getRidersPointClassificationRank(int raceId) throws IDNotRecognisedException {
-        return new int[0];
+//        A ranked list of riders' IDs sorted descending by the sum of their
+//        points in all stages of the race. That is, the first in this list is
+//        the winner (more points). An empty list if there is no result for any
+//        stage in the race.
+        Race race = races.get(raceId);
+        Stage[] raceStages = Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new);
+        raceStages[0].getRiderPoints();
+        ArrayList<Rider> raceRiders = raceStages[0].getStageRidersRanking();
+        HashMap<Rider, Integer> ridersPoints = new HashMap<>();
+
+        for (Rider rider : raceRiders) {
+            int[] riderPoints = getRidersPointsInRace(raceId);
+            int total = 0;
+            for (int i=0; i<riderPoints.length; i++) {
+                total = total + riderPoints[i];
+            }
+            ridersPoints.put(rider, total);
+        }
+
+
+        for (int i = 0; i < raceRiders.size() - 1; i++) {
+            for (int j = 0; j < raceRiders.size() - i - 1; j++) {
+                if (ridersPoints.get(raceRiders.get(j)) > ridersPoints.get(raceRiders.get(j+1))) {
+                    Collections.swap(raceRiders, j, j + 1);
+                }
+            }
+        }
+
+        Collections.reverse(raceRiders);
+
+        int[] points = new int[raceRiders.size()];
+        for (int i=0; i<raceRiders.size(); i++) {
+            points[i] = raceRiders.get(i).getId();
+        }
+
+        return points;
     }
 
     @Override
     public int[] getRidersMountainPointClassificationRank(int raceId) throws IDNotRecognisedException {
-        return new int[0];
+//        A ranked list of riders' IDs sorted descending by the sum of their
+//	      mountain points in all stages of the race. That is, the first in this
+//	      list is the winner (more points). An empty list if there is no result
+//	      for any stage in the race.
+        Race race = races.get(raceId);
+        Stage[] raceStages = Arrays.stream(race.getStages()).mapToObj(stageId -> this.stages.get(stageId)).toArray(Stage[]::new);
+        raceStages[0].getRiderPoints();
+        ArrayList<Rider> raceRiders = raceStages[0].getStageRidersRanking();
+        HashMap<Rider, Integer> ridersPoints = new HashMap<>();
+
+        for (Rider rider : raceRiders) {
+            int[] riderPoints = getRidersMountainPointsInRace(raceId);
+            int total = 0;
+            for (int i=0; i<riderPoints.length; i++) {
+                total = total + riderPoints[i];
+            }
+            ridersPoints.put(rider, total);
+        }
+
+
+        for (int i = 0; i < raceRiders.size() - 1; i++) {
+            for (int j = 0; j < raceRiders.size() - i - 1; j++) {
+                if (ridersPoints.get(raceRiders.get(j)) > ridersPoints.get(raceRiders.get(j+1))) {
+                    Collections.swap(raceRiders, j, j + 1);
+                }
+            }
+        }
+
+        Collections.reverse(raceRiders);
+
+        int[] points = new int[raceRiders.size()];
+        for (int i=0; i<raceRiders.size(); i++) {
+            points[i] = raceRiders.get(i).getId();
+        }
+
+        return points;
     }
 
     @Override
@@ -275,8 +383,6 @@ public class CyclingPortal implements CyclingPortalInterface {
 
         rider.setStageResults(stage, checkpoints);
         stage.setRider(rider);
-
-
 //        add points to rider by the stage type and the place in the rank
     }
 
@@ -316,7 +422,24 @@ public class CyclingPortal implements CyclingPortalInterface {
 
     @Override
     public LocalTime[] getRankedAdjustedElapsedTimesInStage(int stageId) throws IDNotRecognisedException {
-        return new LocalTime[0];
+        Stage stage = stages.get(stageId);
+        ArrayList<Rider> stageRiders = stage.getStageRidersRanking();
+
+        stage.calculateAdjustedElapsedTime();
+
+        for (int i = 0; i < stageRiders.size() - 1; i++) {
+            for (int j = 0; j < stageRiders.size() - i - 1; j++) {
+                if (stageRiders.get(j).getAdjustedElapsedTime(stage).compareTo(stageRiders.get(j+1).getAdjustedElapsedTime(stage)) > 0) {
+                    Collections.swap(stageRiders, j, j + 1);
+                }
+            }
+        }
+
+        LocalTime[] times = new LocalTime[stageRiders.size()];
+        for (int i=0; i<stageRiders.size();i++) {
+            times[i] = LocalTime.MIDNIGHT.plus(stageRiders.get(i).getAdjustedElapsedTime(stage).toSeconds(), ChronoUnit.SECONDS);
+        }
+        return times;
     }
 
     @Override

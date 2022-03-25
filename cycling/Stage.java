@@ -271,7 +271,10 @@ public class Stage implements Serializable {
         for (int i=1; i<rankings.size(); i++) {
             long diff = rankings.get(i).getElapsedTime(this).minus(rankings.get(i-1).getElapsedTime(this)).toMillis();
             if (diff <= 1_000) {
-                rankings.get(i-1).setAdjustedElapsedTime(this, rankings.get(i).getAdjustedElapsedTime(this));
+                rankings.get(i).setAdjustedElapsedTime(this, rankings.get(i-1).getAdjustedElapsedTime(this));
+            }
+            else {
+                rankings.get(i).setAdjustedElapsedTime(this, rankings.get(i).getElapsedTime(this));
             }
         }
     }

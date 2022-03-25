@@ -74,11 +74,35 @@ public class Rider implements Serializable {
         return total;
     }
 
+    public int getMountainPoints(Race race) {
+        ArrayList<Stage> raceStages = race.getRaceStages();
+        int total = 0;
+        for (Stage stage : raceStages) {
+            for (Segment segment : stage.getSegments()) {
+                if (segment.type != SegmentType.SPRINT) {
+                    total = total + this.segmentPoints.get(segment);
+                }
+            }
+        }
+        return total;
+    }
+
+
     public Duration getTotalElapsedTime(Race race) {
         ArrayList<Stage> raceStages = race.getRaceStages();
         Duration total = Duration.ZERO;
         for (Stage stage : raceStages) {
             total = this.stageResults.get(stage).plus(total);
+        }
+//        return LocalTime.MIDNIGHT.plus(total.toSeconds(), ChronoUnit.SECONDS);
+        return total;
+    }
+
+    public Duration getTotalAdjustedElapsedTime(Race race) {
+        ArrayList<Stage> raceStages = race.getRaceStages();
+        Duration total = Duration.ZERO;
+        for (Stage stage : raceStages) {
+            total = this.adjustedElapsedTime.get(stage).plus(total);
         }
 //        return LocalTime.MIDNIGHT.plus(total.toSeconds(), ChronoUnit.SECONDS);
         return total;
